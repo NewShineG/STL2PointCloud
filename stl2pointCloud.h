@@ -41,6 +41,7 @@ typedef struct LayerType
     vector<PointSet> Hatch;
     vector<PointSet> closedContours;
     vector<VertexType> pointCloud;
+    LayerType *pLayer;
 } LayerType;
 
 
@@ -58,6 +59,7 @@ public:
     double mPrecisionZ;						   // z方向切片层高
     long facetnumber;						   // stl三角形平面总数
     long slicenumber_total;					   // stl分层总数
+    vector<double> xx, yy, zz;
     vector<long> index;
     long stl_line_totalnumber;									// 统计stl文件分层后的线段总数
 
@@ -87,6 +89,8 @@ public:
     void find_closedContours(void);
     void find_layer_closedContours(VertexType head,VertexType tail,vector<VectorType> vec_v,PointSet cc_buffer);
     void to3DMatrix(void);
+
+	bool isInsideTriangle(double x0, double y0, FacetType facet);
 	double interpolateZCoordinate(double x0, double y0, FacetType facet);
 };
 
