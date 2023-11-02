@@ -537,9 +537,6 @@ void Stl2pointCould::to3DMatrix(void)
     pl = HeadLayer;
     int xnum_total = int((xmax - xmin) / mPrecisionX) + 1;
     int ynum_total = int((ymax - ymin) / mPrecisionY) + 1;
-    xx.clear();
-    yy.clear();
-    zz.clear();
     double xt, yt, zi, xi, yi,zf;
     VertexType p_now, p_next, p_before,p_buffer;
     vector<long> index_layer;
@@ -633,9 +630,6 @@ void Stl2pointCould::to3DMatrix(void)
 								{
 									index_layer.push_back(ind);
 									index.push_back(ind);
-									xx.push_back(xi);
-									yy.push_back(yi);
-									zz.push_back(zi);
 									p_buffer.x = xi;
 									p_buffer.y = yi;
 									p_buffer.z = zi;
@@ -700,9 +694,6 @@ void Stl2pointCould::to3DMatrix(void)
                         {
                             index_layer.push_back(ind);
                             index.push_back(ind);
-                            xx.push_back(xc);
-                            yy.push_back(yc);
-                            zz.push_back(zi);
                             p_buffer.x = xc;
                             p_buffer.y = yc;
                             p_buffer.z = zi;
