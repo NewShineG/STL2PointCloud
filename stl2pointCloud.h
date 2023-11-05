@@ -38,7 +38,7 @@ typedef struct LayerType
 {
     // 动态数组 向量类型结构体
     vector<VectorType> Contour;		//三角片与分层面的交线数组
-    vector<PointSet> Hatch;
+    vector<FacetType> Hatch;
     vector<PointSet> closedContours;
     vector<VertexType> pointCloud;
     LayerType *pLayer;
@@ -77,20 +77,27 @@ public:
 
     LayerType *HeadLayer; // stl实体各层链表头指针
 
-    vector< LayerType> Solid;
+    vector<LayerType> Solid;
 
     VertexType IntersectLine(VertexType p1, VertexType p2, double zt); // 求P1，P2两点连线和zt分割面的交点
 
     double distPP(VertexType p1, VertexType p2);					   // 求P1，P2两点距离
-    bool readStl(void);
-    bool isRepeatLine(VectorType v,vector<VectorType> vec_v);
-    bool isCoincident(VertexType p1,VertexType p2);
-    bool isRepeatHead(VertexType head,vector<PointSet> cc_v);
-    void find_closedContours(void);
-    void find_layer_closedContours(VertexType head,VertexType tail,vector<VectorType> vec_v,PointSet cc_buffer);
-    void to3DMatrix(void);
-
-	bool isInsideTriangle(double x0, double y0, FacetType facet);
-	double interpolateZCoordinate(double x0, double y0, FacetType facet);
+    bool readStl(void);											//读取STL文件
+    bool isRepeatLine(VectorType v,vector<VectorType> vec_v);	//重复线段
+    bool isCoincident(VertexType p1,VertexType p2);				//误差内接近
+    bool isRepeatHead(VertexType head,vector<PointSet> cc_v);	//判断是否是起始于已寻封闭曲线
+    void find_closedContours(void);	//寻封闭曲线
+    void find_layer_closedContours(VertexType head,VertexType tail,vector<VectorType> vec_v,PointSet cc_buffer);	//寻封闭曲线子函数
+    void to3DMatrix(void);					// 生成点云
+	VertexType toVertexType(float x, float y, float z);		//将x,y,z填充到VertexType类型
+	double interpolateZCoordinate(float x0, float y0, FacetType facet);	// 返回x0,y0竖线与三角片的交点z坐标
+	void removeIntermediatePoints(PointSet& points);				//移除直线上中间点
+	bool areCollinear(const VertexType& p1, const VertexType& p2, const VertexType& p3);  //判断三点是否共线
+	
+	
+	bool doContoursShareCommonPoint(PointSet Contour1, PointSet Contour2);			// 检查两条曲线是否共点的函数													 
+	bool isPointInsideClosedContour(PointSet Contour, const VertexType& point);   // 检查点是否在封闭曲线内的函数
+	bool isContourContained(const PointSet& outerContour, const PointSet& innerContour);
+	vector<PointSet> removeInnerContours(vector<PointSet> ccs);
 };
 

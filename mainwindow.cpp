@@ -128,16 +128,24 @@ void MainWindow::on_toTXTButton_clicked()
 			progressDialog.setAutoReset(false);
 			progressDialog.show();
 			QApplication::processEvents();
-
-
+			double xb;
+			int a;
 			QTextStream stream(&file);
 			for (int znum = 0; znum < s2pd.slicenumber_total; znum++)
 			{
+				xb = DBL_MIN;
+				a = 0;
 				for (int pnum = 0; pnum < s2pd.Solid[znum].pointCloud.size(); pnum++)
 				{
 					stream << QString::number(s2pd.Solid[znum].pointCloud[pnum].x * 1000) << ","
 						<< QString::number(s2pd.Solid[znum].pointCloud[pnum].y * 1000) << ","
 						<< QString::number(s2pd.Solid[znum].pointCloud[pnum].z * 1000) << endl;
+					if (abs(s2pd.Solid[znum].pointCloud[pnum].x - xb) < s2pd.allowError)
+						a++;
+					else
+						a = 0;
+					xb = s2pd.Solid[znum].pointCloud[pnum].x;
+					
 				}
 
 				if (ui->initStartCheckBox->isChecked() && s2pd.Solid[znum].pointCloud.size() > 0)
